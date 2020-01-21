@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fallout Shelter Ruby Blog</title>
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="/favicon.ico">
+
+    <link rel="stylesheet" href="/css/bulma.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/blog.css">
+    <link rel="stylesheet" href="/fonts/openiconic/css/open-iconic.css">
+    <link rel="stylesheet" href="/fonts/lobster/lobster-font-family.css">
+</head>
+
+<body>
+    <!-- START NAV -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="../">
+                        Blog  <span class="oi" data-glyph="bullhorn"></span>
+                    </a>
+                <span class="navbar-burger burger" data-target="navbarMenu">
+                        <span></span>
+                <span></span>
+                <span></span>
+                </span>
+            </div>
+            <div id="navbarMenu" class="navbar-menu">
+                <div class="navbar-end">
+                    <a class="navbar-item is-active">
+                            Home
+                        </a>
+                    <a class="navbar-item">
+                            Contacts
+                        </a>
+                    <a class="navbar-item">
+                            Help
+                        </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- END NAV -->
+
+    <section class="header-hero hero is-info is-medium is-bold">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title">Hi there! And congratulations to survivers!</h1>
+                Stay tuned to shelter news on this web site...
+            </div>
+        </div>
+    </section>
+
+
+    <div class="container">
+
+        <section class="articles">
+            <div class="column is-8 is-offset-2">
+
+                <div class="card article">
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content has-text-centered">
+                                <p class="title article-title"> <%= title %> </p>
+                            </div>
+                        </div>
+                        <div class="content article-body">
+                            <%= body %>
+                        </div>
+                    </div>
+                </div>
+
+              </div>
+
+        </section>
+
+        </div>
+</body>
+
+</html>

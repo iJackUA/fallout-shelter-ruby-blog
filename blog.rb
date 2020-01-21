@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'socket'
+require 'erb'
 
 params = {
   host: 'localhost',
@@ -44,7 +45,7 @@ while session = tcp_server.accept
     current_ext = path_parts.last
     if path == '/favicon.ico' || static_extensions.include?(current_ext.to_sym)
       puts "Serve static file: #{path}"
-      file_path = "./public#{path}"
+      layout_path = "./public#{path}"
       content_type = content_types_map[current_ext.to_sym]
       response_code = 200
       handled = true
@@ -53,31 +54,45 @@ while session = tcp_server.accept
 
   unless handled
     # serve dynamic rouiting request
+    view_params = {}
     if verb == 'GET' && path == '/'
-      file_path = './data/index.html'
+      layout_path = './layouts/main.erb'
       content_type = 'text/html'
       response_code = 200
     elsif verb == 'GET' && path.start_with?('/page/')
       file_name = path.sub '/page/', ''
-      file_path = "./data/#{file_name}.html"
+      file_path = "./data/#{file_name}.md"
+      file = File.read(file_path)
+      fm, body = file.split('---')
+      fm = fm.split("\n").inject({}) { |obj, e| key, val = e.split(': '); obj[key.to_sym] = val; obj }
+      view_params = {
+        title: fm[:title],
+        body: body
+      }
+      layout_path = './layouts/post.erb'
       content_type = 'text/html'
       response_code = 200
     else
-      file_path = './data/error-404.html'
+      layout_path = './data/error-404.erb'
       content_type = 'text/html'
       response_code = 404
     end
   end
 
-  if File.exist? file_path
-    file = File.read(file_path)
+  if File.exist? layout_path
+    layout = File.read(layout_path)
+    response = if handled
+                 layout
+               else
+                 ERB.new(layout).result_with_hash(view_params)
+               end
   else
-    file = "File #{path} not found"
+    response = "File #{path} not found"
     content_type = 'text/html'
     response_code = 404
   end
 
-  response = "#{http_version} #{response_code}\r\nContent-Type: #{content_type}\r\nContent-Size: #{file.length}\r\n\r\n#{file}"
+  response = "#{http_version} #{response_code}\r\nContent-Type: #{content_type}\r\nContent-Size: #{response.length}\r\n\r\n#{response}"
 
   session.puts response
   session.close
