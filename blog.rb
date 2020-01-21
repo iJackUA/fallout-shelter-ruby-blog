@@ -1,4 +1,6 @@
-require "socket"
+# frozen_string_literal: true
+
+require 'socket'
 
 params = {
   host: 'localhost',
@@ -14,10 +16,11 @@ while session = tcp_server.accept
   headers = {}
   handled = false
 
-  while header_string = session.gets do
+  while header_string = session.gets
     break if header_string == "\r\n"
+
     key, value = header_string.split(': ')
-    http_key = 'HTTP_' + key.sub('-','_').upcase
+    http_key = 'HTTP_' + key.sub('-', '_').upcase
     value.sub!("\r\n", '')
     headers[http_key] = value
   end
@@ -25,21 +28,30 @@ while session = tcp_server.accept
   verb, path, http_version = request.split(' ')
 
   # serve static
-  static_extensions = %w(css js ico)
+  content_types_map = {
+    ico: 'image/x-icon',
+    css: 'text/css',
+    png: 'image/png',
+    ttf: 'application/x-font-ttf',
+    otf: 'application/x-font-opentype',
+    eot: 'application/vnd.ms-fontobject'
+  }
+  content_types_map.default = 'text/plain'
+  static_extensions = content_types_map.keys
+
   if verb == 'GET'
     path_parts = path.split('.')
     current_ext = path_parts.last
-    if path == '/favicon.ico' || static_extensions.include?(current_ext)
+    if path == '/favicon.ico' || static_extensions.include?(current_ext.to_sym)
       puts "Serve static file: #{path}"
       file_path = "./public#{path}"
-      # TODO : Dynamic content type
-      content_type = 'image/x-icon'
+      content_type = content_types_map[current_ext.to_sym]
       response_code = 200
       handled = true
     end
   end
 
-  if !handled
+  unless handled
     # serve dynamic rouiting request
     if verb == 'GET' && path == '/'
       file_path = './data/index.html'
