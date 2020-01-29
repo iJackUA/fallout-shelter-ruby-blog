@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Fallout Shelter Ruby Blog</title>
+    <title>"Primitive Technology" Ruby Blog</title>
     <link rel="icon" type="image/x-icon" sizes="32x32" href="/favicon.ico">
 
     <link rel="stylesheet" href="/css/bulma.min.css" />
@@ -48,8 +48,8 @@
     <section class="header-hero hero is-info is-medium is-bold">
         <div class="hero-body">
             <div class="container has-text-centered">
-                <h1 class="title">Hi there! And congratulations to survivers!</h1>
-                Stay tuned to shelter news on this web site...
+                <h1 class="title">Congratulations to first Homo Sapiens here!</h1>
+                Stay tuned to humankind news on this web site...
             </div>
         </div>
     </section>
@@ -85,7 +85,7 @@
                             <img src="<%= post[:fm][:avatar] %>" class="author-image" alt="Avatar">
                             </div>
                             <div class="media-content has-text-centered">
-                                <p class="title article-title"><a href=""><%= post[:fm][:title] %></a></p>
+                                <p class="title article-title"><a href="/page/<%= post[:id] %>"><%= post[:fm][:title] %></a></p>
                                 <p class="subtitle is-6 article-subtitle">
                                     <a href="#"><%= post[:fm][:author] %></a>
                                 </p>

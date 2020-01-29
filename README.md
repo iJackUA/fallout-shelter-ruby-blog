@@ -1,7 +1,9 @@
-# Fallout Shelter Ruby Blog
+# "Primitive Technology" Ruby Blog
+
 Can I write a web app (CRUD blog) with a pure Ruby, no gems, no Rails etc.?
+Other non-Ruby libs like CSS frameworks or Docker allowed - to make result more visible and keep it under control.
 
 ## Plan
 
-[x] Serve static page
-[ ]
+- Serve static page
+-

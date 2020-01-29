@@ -10,9 +10,10 @@ params = {
 
 def get_md_page(file_path)
   file = File.read(file_path)
+  id = file_path.split('.')[-2].split('/')[-1]
   fm, body = file.split('---')
   fm = fm.split("\n").each_with_object({}) { |e, obj| key, val = e.split(': '); obj[key.to_sym] = val; }
-  { fm: fm, body: body }
+  { fm: fm, id: id, body: body }
 end
 
 tcp_server = TCPServer.new(params[:host], params[:port])
