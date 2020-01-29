@@ -8,6 +8,13 @@ params = {
   port: 3333
 }
 
+def get_md_page(file_path)
+  file = File.read(file_path)
+  fm, body = file.split('---')
+  fm = fm.split("\n").each_with_object({}) { |e, obj| key, val = e.split(': '); obj[key.to_sym] = val; }
+  { fm: fm, body: body }
+end
+
 tcp_server = TCPServer.new(params[:host], params[:port])
 
 while session = tcp_server.accept
@@ -57,18 +64,15 @@ while session = tcp_server.accept
     view_params = {}
     if verb == 'GET' && path == '/'
       layout_path = './layouts/main.erb'
+      post_files = Dir.glob('./data/*.md').sort.reverse
+      posts = post_files.map { |p| get_md_page(p) }
+      view_params = { posts: posts }
       content_type = 'text/html'
       response_code = 200
     elsif verb == 'GET' && path.start_with?('/page/')
       file_name = path.sub '/page/', ''
       file_path = "./data/#{file_name}.md"
-      file = File.read(file_path)
-      fm, body = file.split('---')
-      fm = fm.split("\n").inject({}) { |obj, e| key, val = e.split(': '); obj[key.to_sym] = val; obj }
-      view_params = {
-        title: fm[:title],
-        body: body
-      }
+      view_params = get_md_page(file_path)
       layout_path = './layouts/post.erb'
       content_type = 'text/html'
       response_code = 200
