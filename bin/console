@@ -1,6 +1,13 @@
 #!/usr/bin/env ruby
 
 require_relative '../environment'
-
 require 'irb'
+
+def reload!
+  puts 'Reloading...'
+  Kernel.exec "./bin/console"
+end
+
+(class << self; self; end).class_eval { alias_method :r!, :reload! }
+
 IRB.start

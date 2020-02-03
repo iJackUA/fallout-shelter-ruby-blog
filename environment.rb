@@ -1,12 +1,4 @@
-# frozen_string_literal: true
-
-require 'socket'
 require 'erb'
-
-params = {
-  host: 'localhost',
-  port: 3333
-}
 
 def get_md_page(file_path)
   file = File.read(file_path)
@@ -16,12 +8,12 @@ def get_md_page(file_path)
   { fm: fm, id: id, body: body }
 end
 
-tcp_server = TCPServer.new(params[:host], params[:port])
-
-while session = tcp_server.accept
+def request_handler(session)
   request_start_time = Time.now
 
   request = session.gets
+  return if request.nil?
+
   headers = {}
   handled = false
 
@@ -97,7 +89,12 @@ while session = tcp_server.accept
     response_code = 404
   end
 
-  response = "#{http_version} #{response_code}\r\nContent-Type: #{content_type}\r\nContent-Size: #{response.length}\r\n\r\n#{response}"
+  response = %[#{http_version} #{response_code}
+Content-Type: #{content_type}
+Content-Size: #{response.length}
+
+#{response}]
+
 
   session.puts response
   session.close

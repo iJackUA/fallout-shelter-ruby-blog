@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+require_relative './lib/server/pt_server'
+require_relative './environment'
+
+params = {
+  host: 'localhost',
+  port: 3333
+}
+
+server = PTServer.new(params)
+server.handle(method(:request_handler))
